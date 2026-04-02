@@ -11,14 +11,23 @@ export default function Home() {
   useEffect(() => {
     const carregarEstatisticas = async () => {
       try {
-        const res = await api.get('/estatisticas')
-        setStats(res.data)
+        // 1. Tenta buscar no seu Java
+        const res = await api.get('/estatisticas');
+        setStats(res.data);
       } catch (error) {
-        console.error("Erro ao carregar dashboard:", error)
+        // 2. Se o Java estiver desligado (erro), usa os dados de teste
+        console.warn("⚠️ Servidor Java offline. Usando dados de demonstração.");
+        setStats({
+          totalTimes: 5,
+          totalJogadores: 12,
+          totalDuelistas: 7,
+          totalSuportes: 5
+        });
       }
-    }
-    carregarEstatisticas()
-  }, [])
+    };
+
+    carregarEstatisticas();
+  }, []); // Mantém o array vazio para rodar só uma vez ao carregar a página
 
   // Estado de carregamento elegante
   if (!stats) {

@@ -20,12 +20,18 @@ export default function Dashboard() {
 
   const buscarDados = async () => {
     try {
-      const resposta = await api.get('/times')
-      setTimes(resposta.data)
+      const res = await api.get('/times');
+      setTimes(res.data);
     } catch (error) {
-      console.error("Erro ao buscar dados:", error)
+      console.warn("⚠️ Servidor Offline. Carregando times de demonstração.");
+      setTimes([
+        { id: 1, nome: "LOUD", regiao: "Brasil" },
+        { id: 2, nome: "Sentinels", regiao: "NA" },
+        { id: 3, nome: "Fnatic", regiao: "Europa" },
+        { id: 4, nome: "Paper Rex", regiao: "APAC" }
+      ]);
     }
-  }
+  };
 
   useEffect(() => { buscarDados() }, [])
 

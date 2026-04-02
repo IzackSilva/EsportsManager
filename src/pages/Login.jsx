@@ -8,31 +8,27 @@ function Login() {
   const [senha, setSenha] = useState('')
   const navigate = useNavigate()
 
-const handleLogin = async (e) => { // <--- O 'async' PRECISA estar aqui!
-    e.preventDefault();
+const handleLogin = async (e) => {
+  e.preventDefault();
 
+    // 1. CRIAMOS O LOGIN DE TESTE AQUI
+    if (login === 'admin' && senha === 'admin123') {
+      localStorage.setItem('token', 'TOKEN_DE_TESTE_GERADO_PELO_FRONT');
+      toast.success('Entrando como Convidado (Modo de Teste) 🛡️');
+      navigate('/home');
+      return; // Para a execução aqui e não chama a API
+    }
+
+    // 2. LOGICA NORMAL (CHAMANDO O JAVA)
     try {
-      console.log("Tentando logar com:", login);
-
-      const resposta = await api.post('/login', {
-        login: login,
-        senha: senha
-      });
-
-      console.log("Resposta do Java:", resposta.data);
-
+      const resposta = await api.post('/login', { login, senha });
       if (resposta.data.token) {
         localStorage.setItem('token', resposta.data.token);
-        console.log("✅ Token salvo com sucesso!");
-        toast.success('Acesso autorizado! Bem-vindo, Pro.');
+        toast.success('Acesso autorizado!');
         navigate('/home');
-      } else {
-        console.warn("⚠️ O Java não enviou um campo 'token' no JSON.");
       }
-
     } catch (error) {
-      console.error('Erro ao logar:', error);
-      toast.error('Falha na autenticação. Verifique seu usuário e senha.');
+      toast.error('Erro: O servidor Java está offline ou credenciais inválidas.');
     }
   };
 

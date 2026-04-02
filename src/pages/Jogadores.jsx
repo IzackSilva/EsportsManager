@@ -32,14 +32,25 @@ export default function Jogadores() {
       const [resJogadores, resTimes] = await Promise.all([
         api.get('/jogadores'),
         api.get('/times')
-      ])
-      setJogadores(resJogadores.data)
-      setTimes(resTimes.data)
+      ]);
+      setJogadores(resJogadores.data);
+      setTimes(resTimes.data);
     } catch (error) {
-      toast.error("Erro ao carregar dados do servidor.")
+      console.warn("⚠️ Servidor Offline. Carregando atletas de demonstração.");
+      // Dados para o seletor do formulário
+      setTimes([
+        { id: 1, nome: "LOUD" },
+        { id: 2, nome: "Sentinels" }
+      ]);
+      // Dados para a tabela
+      setJogadores([
+        { id: 10, nickname: "Aspas", funcao: "Duelista", nomeTime: "LOUD" },
+        { id: 11, nickname: "Less", funcao: "Suporte", nomeTime: "LOUD" },
+        { id: 12, nickname: "TenZ", funcao: "Duelista", nomeTime: "Sentinels" },
+        { id: 13, nickname: "Sacy", funcao: "Suporte", nomeTime: "Sentinels" }
+      ]);
     }
-  }
-
+  };
   useEffect(() => { carregarDados() }, [])
 
   // LÓGICA DE FILTRO E ORDENAÇÃO
